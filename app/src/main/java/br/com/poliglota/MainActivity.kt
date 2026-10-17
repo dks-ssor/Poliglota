@@ -36,6 +36,7 @@ import android.widget.ImageView
 import android.view.ViewGroup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 
 private val Ink = Color(0xFF10131C)
 private val Panel = Color(0xFF1B2030)
@@ -93,9 +94,7 @@ private fun PoliglotaApp(onExport: (InstalledApp, (String) -> Unit) -> Unit) {
             inspecting = true
             status = "Analisando estrutura do APK…"
             report = null
-            LaunchedEffect(uri) { }
             // Work off the UI thread; APK contents are treated as untrusted input.
-            (context as? ComponentActivity)?.lifecycleScope
             kotlinx.coroutines.MainScope().launch {
                 val result = withContext(Dispatchers.IO) { ApkTranslationPipeline.inspectApk(context, uri) }
                 report = result
