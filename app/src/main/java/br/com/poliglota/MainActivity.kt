@@ -1,6 +1,7 @@
 package br.com.poliglota
 
 import android.content.Intent
+import android.provider.Settings
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
@@ -30,6 +31,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -200,7 +202,10 @@ private fun PoliglotaApp() {
             } else {
                 AppDetails(
                     app = selectedApp!!,
-                    onBack = { selectedApp = null }
+                    onBack = { selectedApp = null },
+                    onEnableTranslation = {
+                        context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+                    }
                 )
             }
         }
@@ -242,26 +247,27 @@ private fun AppRow(app: InstalledApp, onClick: () -> Unit) {
 }
 
 @Composable
-private fun AppDetails(app: InstalledApp, onBack: () -> Unit) {
+private fun AppDetails(
+    app: InstalledApp,
+    onBack: () -> Unit,
+    onEnableTranslation: () -> Unit
+) {
     Column(verticalArrangement = Arrangement.spacedBy(14.dp), modifier = Modifier.fillMaxWidth()) {
         Text("‹ Voltar", color = Violet, modifier = Modifier.clickable(onClick = onBack).padding(vertical = 8.dp))
         Text(app.label, fontSize = 24.sp, fontWeight = FontWeight.Bold)
         Text("Pacote: ${app.packageName}", color = Muted, fontSize = 12.sp)
         Card(colors = CardDefaults.cardColors(containerColor = Panel), shape = RoundedCornerShape(18.dp)) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Idioma de destino", color = Muted)
-                Text("Português brasileiro (pt-BR)", fontWeight = FontWeight.SemiBold)
-                Text("Próxima etapa: análise dos recursos de texto deste aplicativo.", color = Muted)
+                Text("Tradução durante o jogo", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Text("Ative o serviço do Poliglota uma vez. Depois, abra o jogo normalmente: os textos que o Android conseguir identificar serão traduzidos e mostrados em uma faixa sobre a tela.", color = Muted)
+                Button(onClick = onEnableTranslation, modifier = Modifier.fillMaxWidth()) {
+                    Icon(Icons.Default.Translate, contentDescription = null, modifier = Modifier.padding(end = 6.dp))
+                    Text("Ativar tradutor")
+                }
             }
         }
-        Text("Tradução de APK", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
-        Text(
-            "O fluxo de tradução de APK ainda está em desenvolvimento. Esta versão já identifica os aplicativos e exibe seus ícones originais, mas ainda não modifica os arquivos nem gera um APK traduzido.",
-            color = Muted
-        )
-        Text(
-            "Próxima implementação: selecionar um APK, analisar os recursos de texto, traduzir para pt-BR e gerar um pacote revisado. A compatibilidade depende do formato e das proteções do aplicativo.",
-            color = Muted
-        )
+        Text("Como funciona", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+        Text("O Poliglota usa leitura de acessibilidade e um serviço de tradução online (inglês → português brasileiro). A tradução aparece sobre o jogo; o aplicativo original não é alterado.", color = Muted)
+        Text("O serviço precisa ser ativado nas configurações de Acessibilidade do Android. Alguns jogos desenham todo o texto dentro da imagem e não expõem os textos ao Android; nesses casos, esta versão não consegue detectá-los.", color = Muted)
     }
 }
