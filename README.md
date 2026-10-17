@@ -1,29 +1,28 @@
 # Poliglota
 
-Aplicativo Android para analisar recursos de texto de aplicativos compatíveis e preparar traduções para português brasileiro (pt-BR).
+Aplicativo Android em Kotlin/Jetpack Compose para selecionar jogos instalados, exportar o APK base e inspecionar a estrutura de um APK escolhido pelo usuário.
 
-## Estado do projeto
+## Funcionalidade atual
 
-Este repositório inicia a base Android do Poliglota. A primeira versão terá uma interface nativa para listar aplicativos visíveis ao usuário, pesquisar e separar jogos de outros aplicativos. A tradução e a geração de APKs modificados serão implementadas por etapas, pois dependem do formato do pacote, das assinaturas e das proteções de cada aplicativo.
+- Lista aplicativos com inicializador e identifica jogos quando o Android fornece essa categoria.
+- Pesquisa por nome e identificador de pacote.
+- Exporta o APK base de um aplicativo instalado para um destino escolhido pelo usuário.
+- Permite selecionar um APK e faz inspeção estrutural básica: tamanho, arquivos XML em `res/values`, presença de `assets/` e bibliotecas nativas.
+- Não envia APKs para servidores nem os publica no repositório.
+
+## Limite importante
+
+**A tradução e reconstrução integral de APK ainda não estão implementadas.** A inspeção ZIP não decodifica `resources.arsc` nem XML binário do Android. Um fluxo completo precisa integrar uma versão compatível do Apktool (ou ferramenta equivalente), traduzir apenas recursos textuais selecionados, reconstruir o pacote, assinar o APK e validar o resultado. Jogos com split APKs, recursos baixados, textos em imagens, proteções ou verificações de assinatura exigem tratamento adicional. Não desinstale o jogo original até validar uma versão modificada funcional; a assinatura diferente normalmente impede instalar como atualização e a desinstalação pode apagar dados.
+
+## Build
+
+O workflow do GitHub Actions executa `gradle assembleDebug` e publica o APK de depuração como artefato da execução. Para instalar, baixe o artefato de uma execução concluída em Actions.
 
 ## Tecnologias
 
-- Kotlin
-- Android SDK
+- Kotlin, Android SDK e Jetpack Compose
 - Gradle Kotlin DSL
-- Jetpack Compose
-
-## Abrir o projeto
-
-1. Baixe ou clone este repositório.
-2. Abra a pasta no Android Studio.
-3. Aguarde a sincronização do Gradle.
-4. Execute o app em um dispositivo Android ou emulador.
-
-## Limitações importantes
-
-Nem todo APK pode ser traduzido automaticamente. Alguns textos ficam em recursos compilados, arquivos proprietários, imagens ou servidores externos. Um APK modificado normalmente precisa ser assinado novamente e pode não funcionar como atualização do original. O Poliglota deve informar limitações em vez de declarar sucesso sem verificar o resultado.
 
 ## Privacidade
 
-Não coloque chaves de API, senhas ou certificados privados neste repositório.
+Não inclua APKs de jogos, chaves privadas, senhas ou certificados de assinatura neste repositório público.
