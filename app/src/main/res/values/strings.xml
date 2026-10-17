@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="poliglota_accessibility_description">Lê textos visíveis em jogos para exibir uma tradução sobre a tela. O texto identificado é enviado ao serviço de tradução online.</string>
+</resources>
