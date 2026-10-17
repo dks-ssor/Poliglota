@@ -50,6 +50,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
+import android.widget.ImageView
+import android.view.ViewGroup
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -215,12 +218,20 @@ private fun AppRow(app: InstalledApp, onClick: () -> Unit) {
             modifier = Modifier.padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier.size(48.dp).clip(RoundedCornerShape(12.dp)).background(Violet),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(app.label.take(1).uppercase(), color = Ink, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-            }
+            AndroidView(
+                factory = { viewContext ->
+                    ImageView(viewContext).apply {
+                        layoutParams = ViewGroup.LayoutParams(
+                            (48 * viewContext.resources.displayMetrics.density).toInt(),
+                            (48 * viewContext.resources.displayMetrics.density).toInt()
+                        )
+                        scaleType = ImageView.ScaleType.FIT_CENTER
+                        setImageDrawable(app.icon)
+                    }
+                },
+                update = { imageView -> imageView.setImageDrawable(app.icon) },
+                modifier = Modifier.size(48.dp).clip(RoundedCornerShape(12.dp))
+            )
             Column(modifier = Modifier.weight(1f).padding(start = 13.dp)) {
                 Text(app.label, fontWeight = FontWeight.SemiBold, color = Color.White)
                 Text(if (app.isGame) "Jogo" else "Aplicativo", color = Muted, fontSize = 12.sp)
@@ -243,8 +254,13 @@ private fun AppDetails(app: InstalledApp, onBack: () -> Unit) {
                 Text("Próxima etapa: análise dos recursos de texto deste aplicativo.", color = Muted)
             }
         }
+        Text("Tradução de APK", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
         Text(
-            "A tradução de APKs ainda não está implementada nesta versão. O Poliglota não vai modificar nem reinstalar o aplicativo sem sua autorização.",
+            "O fluxo de tradução de APK ainda está em desenvolvimento. Esta versão já identifica os aplicativos e exibe seus ícones originais, mas ainda não modifica os arquivos nem gera um APK traduzido.",
+            color = Muted
+        )
+        Text(
+            "Próxima implementação: selecionar um APK, analisar os recursos de texto, traduzir para pt-BR e gerar um pacote revisado. A compatibilidade depende do formato e das proteções do aplicativo.",
             color = Muted
         )
     }
