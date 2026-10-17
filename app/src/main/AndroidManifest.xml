@@ -10,6 +10,7 @@
     <application
         android:allowBackup="false"
         android:label="Poliglota"
+        android:icon="@drawable/ic_poliglota"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity
