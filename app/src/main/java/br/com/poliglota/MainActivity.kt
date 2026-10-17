@@ -215,11 +215,12 @@ private fun AppRow(app: InstalledApp, onClick: () -> Unit) {
             modifier = Modifier.padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            androidx.compose.foundation.Image(
-                painter = androidx.compose.ui.graphics.painter.DrawablePainter(app.icon),
-                contentDescription = null,
-                modifier = Modifier.size(48.dp).clip(RoundedCornerShape(12.dp))
-            )
+            Box(
+                modifier = Modifier.size(48.dp).clip(RoundedCornerShape(12.dp)).background(Violet),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(app.label.take(1).uppercase(), color = Ink, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+            }
             Column(modifier = Modifier.weight(1f).padding(start = 13.dp)) {
                 Text(app.label, fontWeight = FontWeight.SemiBold, color = Color.White)
                 Text(if (app.isGame) "Jogo" else "Aplicativo", color = Muted, fontSize = 12.sp)
